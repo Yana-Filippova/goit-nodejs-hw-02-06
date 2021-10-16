@@ -1,4 +1,5 @@
-const { Schema, model } = require("mongoose");
+const { Schema, SchemaTypes, model } = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const contactSchema = new Schema(
   {
@@ -20,6 +21,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: "user",
+    },
   },
   {
     versionKey: false,
@@ -28,7 +33,6 @@ const contactSchema = new Schema(
       virtuals: true,
       transform: function (doc, ret) {
         delete ret._id;
-        // ret.name = `@${ret.name}`
         return ret;
       },
     },
@@ -40,6 +44,8 @@ contactSchema.path("name").validate(function (value) {
   const re = /[A-Z]\w+( [A-Z]\w+)+/;
   return re.test(String(value));
 });
+
+contactSchema.plugin(mongoosePaginate);
 
 const Contact = model("contact", contactSchema);
 
