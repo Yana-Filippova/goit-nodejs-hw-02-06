@@ -70,7 +70,7 @@ const logout = async (req, res) => {
 const currentUser = async (req, res, next) => {
   try {
     const id = req.user._id;
-    const { name, email, subscription } = await Users.findById(id);
+    const { name, email, subscription } = req.user;
     return res.status(HttpCode.OK).json({
       status: "success",
       code: HttpCode.OK,
