@@ -43,3 +43,4 @@ module.exports.validateContactStatus = async (req, res, next) => {
 module.exports.validateContactId = async (req, res, next) => {
   return await validate(schemaContactId, req.params, res, next);
 };
+
