@@ -36,7 +36,7 @@ const userSchema = new Schema(
     avatarURL: {
       type: String,
       default: function () {
-        return gravatar.url(this.email, { s: AvatarSize.SIZE }, true);
+        return gravatar.url(this.email, { s: AvatarSize }, true);
       },
     },
     idUserCloud: { type: String, default: null },

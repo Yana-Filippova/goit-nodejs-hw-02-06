@@ -23,17 +23,9 @@ const LimiterParameters = {
   MAX_ATTEMPT_NUMBER: 3,
 };
 
-const JSONLimit = {
-  DEFINED_LIMIT: 10000,
-};
-
-const AvatarSize = {
-  SIZE: "250",
-};
-
-const LimitFieldSize = {
-  FIELD_SIZE: 2000000,
-};
+const ClientMaxBodySize = 10000;
+const AvatarSize = "250";
+const LimitFieldSize = 2000000;
 
 const Transformation = {
   WIDTH: 250,
@@ -44,7 +36,7 @@ module.exports = {
   HttpCode,
   Subscription,
   LimiterParameters,
-  JSONLimit,
+  ClientMaxBodySize,
   AvatarSize,
   LimitFieldSize,
   Transformation,
