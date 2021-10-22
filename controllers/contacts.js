@@ -52,7 +52,7 @@ const removeContact = async (req, res) => {
   throw new CustomError(HttpCode.NOT_FOUND, "Not Found!");
 };
 
-const updateContact = async (req, res) => {
+const updateContact = async (req, res, next) => {
   const userId = req.user._id;
   const contact = await Contacts.updateContact(
     req.params.contactId,

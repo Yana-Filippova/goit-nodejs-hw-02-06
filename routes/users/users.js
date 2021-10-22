@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
+
 const {
   signup,
   login,
   logout,
   currentUser,
   updateSubscription,
+  uploadAvatar,
 } = require("../../controllers/users");
 
 const {
@@ -16,6 +18,7 @@ const {
 
 const guard = require("../../helpers/guard");
 const loginLimit = require("../../helpers/rate-limit-login");
+const upload = require("../../helpers/uploads");
 
 router.post("/signup", validateCreateUser, signup);
 
@@ -31,5 +34,7 @@ router.patch(
   validateUpdateSubscription,
   updateSubscription
 );
+
+router.patch("/avatars", guard, upload.single("avatar"), uploadAvatar);
 
 module.exports = router;
