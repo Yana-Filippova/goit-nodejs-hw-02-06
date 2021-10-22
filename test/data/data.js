@@ -12,10 +12,8 @@ const newUserForRouteContact = {
 };
 
 const newUserForRouteUser = {
-  // name: "Linda Li",
   email: "linda.li@gmail.com",
   password: "12345678",
-  // subscription: "business",
 };
 
 module.exports = { newContact, newUserForRouteContact, newUserForRouteUser };

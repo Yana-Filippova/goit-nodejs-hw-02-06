@@ -14,8 +14,7 @@ const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(express.static("public"));
 app.use(helmet());
-// app.get("env") !== "test" && app.use(logger(formatsLogger)); //to add
-app.use(logger(formatsLogger)); // to remove
+app.get("env") !== "test" && app.use(logger(formatsLogger)); 
 app.use(cors());
 app.use(express.json({ limit: JSONLimit.DEFINED_LIMIT }));
 app.use(boolParser());
