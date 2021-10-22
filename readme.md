@@ -1,12 +1,12 @@
 <h2>REST API used for working with a collection of contacts.</h2>
 
 <h2>Commands:</h2>
-npm start — server run in production mode;
-npm run start:dev — server run in development mode;
-npm run lint — run code check execution with the help of eslint, it should be done before each PR and fix all linter errors;
-npm lint:fix — the same linter check, but with automatic error-fixing;
-npm test — test launch in test environment;
-npm test:coverage — test report generation.
+- npm start — server run in production mode;
+- npm run start:dev — server run in development mode;
+- npm run lint — run code check execution with the help of eslint, it should be done before each PR and fix all linter errors;
+- npm lint:fix — the same linter check, but with automatic error-fixing;
+- npm test — test launch in test environment;
+- npm test:coverage — test report generation.
 
 <h2>Routes:</h2>
 <h3>1.Contacts</h3>
