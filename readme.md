@@ -3,7 +3,7 @@
 <h2>Commands:</h2>
 <li>npm start — server run in production mode;</li>
 <li>npm run start:dev — server run in development mode;</li>
-<li>npm run lint — run code check execution with the help of eslint, it should be done before each PR and fix all linter errors;</li>
+<li>npm run lint — run code check execution with the help of eslint; it should be done before each PR and fix all linter errors;</li>
 <li>npm lint:fix — the same linter check, but with automatic error-fixing;</li>
 <li>npm test — test launch in test environment;</li>
 <li>npm test:coverage — test report generation.</li>
