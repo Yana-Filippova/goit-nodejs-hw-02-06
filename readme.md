@@ -1,5 +1,4 @@
 <h2>REST API used for working with a collection of contacts with user email verification after registration.</h2>
-
 <h2>Commands:</h2>
 <li><b>npm start</b> - server run in production mode;</li>
 <li><b>npm run start:dev</b> - server run in development mode;</li>
