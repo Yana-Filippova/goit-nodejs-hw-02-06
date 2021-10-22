@@ -1,4 +1,4 @@
-<h1>REST API used for working with a collection of contacts.</h1>
+<h2>REST API used for working with a collection of contacts.</h2>
 
 <h2>Commands:</h2>
 npm start — server run in production mode;
