@@ -15,7 +15,7 @@
 <li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/POST request/</b> - add a new contact (required fields: name, email, phone, optional field: favorite);</li>
 <li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/PUT request/</b> - update an existing contact (at least 1 field should be updated);</li>
 <li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/DELETE request/</b> - remove a contact;</li>
-<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact;</li>
+<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact.</li>
 
 <h3>2. Users</h3>
 <li><a href="http://localhost:3000/api/users/signup" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/signup</a> - <b>/POST request/</b> - user registration;</li>
@@ -26,5 +26,5 @@
 <li><a href="http://localhost:3000/api/users/starter" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/starter</a> - <b>/GET request/</b> - access by "starter" subscription;</li>
 <li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
 <li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
-<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar;</li>
+<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
 
