@@ -1,31 +1,30 @@
-## GoIT Node.js Course Template Homework
+<h1>REST API used for working with a collection of contacts.</h1>
 
-Выполните форк этого репозитория для выполнения домашних заданий (2-6)
-Форк создаст репозиторий на вашем http://github.com
+<h2>Commands:</h2>
+npm start — server run in production mode;
+npm run start:dev — server run in development mode;
+npm run lint — run code check execution with the help of eslint, it should be done before each PR and fix all linter errors;
+npm lint:fix — the same linter check, but with automatic error-fixing;
+npm test — test launch in test environment;
+npm test:coverage — test report generation.
 
-Добавьте ментора в коллаборацию
+<h2>Routes:</h2>
+<h3>1.Contacts</h3>
+http://localhost:3000/api/contacts - (GET request): get all contacts;
+http://localhost:3000/api/contacts/id - (GET request): get a contact by Id;
+http://localhost:3000/api/contacts - (POST request): add a new contact (required fields: name, email, phone, optional field: favorite);
+http://localhost:3000/api/contacts/id - (PUT request): update an existing contact (at least 1 field should be updated);
+http://localhost:3000/api/contacts/id - (DELETE request): remove a contact;
+http://localhost:3000/api/contacts/id/favorite - (PATCH request): update 'favorite' field for a contact;
 
-Для каждой домашней работы создавайте свою ветку.
+<h3>2.Users</h3>
+http://localhost:3000/api/users/signup - (POST request): user registration;
+http://localhost:3000/api/users/login - (POST request): user login;
+http://localhost:3000/api/users/logout - (POST request): user logout;
+http://localhost:3000/api/users/current - (GET request): get user data by token;
+http://localhost:3000/api/users/subscription - (PATCH request): update user subscription;
+http://localhost:3000/api/users/starter - (GET request): access by "starter" subscription;
+http://localhost:3000/api/users/pro - (GET request): access by "pro" subscription;
+http://localhost:3000/api/users/business - (GET request): access by "business" subscription;
+http://localhost:3000/api/users/avatars - (PATCH request): upload user avatar;
 
-- hw02
-- hw03
-- hw04
-- hw05
-- hw06
-
-Каждая новая ветка для дз должна делаться с master
-
-После того как вы закончили выполнять домашнее задание в своей ветке, необходимо сделать пулл-реквест (PR). Потом добавить ментора для ревью кода. Только после того как ментор заапрувит PR, вы можете выполнить мердж ветки с домашним заданием в мастер.
-
-Внимательно читайте комментарии ментора. Исправьте замечания и сделайте коммит в ветке с домашним заданием. Изменения подтянуться в PR автоматически после того как вы отправите коммит с исправлениями на github
-После исправления снова добавьте ментора на ревью кода.
-
-- При сдаче домашней работы есть ссылка на PR
-- JS-код чистый и понятный, для форматирования используется Prettier
-
-### Команды:
-
-- `npm start` &mdash; старт сервера в режиме production
-- `npm run start:dev` &mdash; старт сервера в режиме разработки (development)
-- `npm run lint` &mdash; запустить выполнение проверки кода с eslint, необходимо выполнять перед каждым PR и исправлять все ошибки линтера
-- `npm lint:fix` &mdash; та же проверка линтера, но с автоматическими исправлениями простых ошибок
