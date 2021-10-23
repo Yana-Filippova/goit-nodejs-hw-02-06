@@ -1,29 +1,249 @@
-<h2>REST API used for working with a collection of contacts.</h2>
+# Домашнє завдання 4
 
-<h2>Commands:</h2>
-<li><b>npm start</b> - server run in production mode;</li>
-<li><b>npm run start:dev</b> - server run in development mode;</li>
-<li><b>npm run lint</b> - run code check execution with the help of eslint; it should be done before each PR and fix all linter errors;</li>
-<li><b>npm lint:fix</b> - the same linter check, but with automatic error-fixing;</li>
-<li><b>npm test</b> - test launch in test environment;</li>
-<li><b>npm test:coverage</b> - test report generation.</li>
+Створи гілку `04-auth` з гілки `master`.
 
-<h2>Routes:</h2>
-<h3>1. Contacts</h3>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/GET request/</b> - get all contacts;</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/GET request/</b> - get a contact by Id;</li>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/POST request/</b> - add a new contact (required fields: name, email, phone, optional field: favorite);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/PUT request/</b> - update an existing contact (at least 1 field should be updated);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/DELETE request/</b> - remove a contact;</li>
-<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact.</li>
+Продовж створення REST API для роботи з колекцією контактів. Додай логіку аутентифікації / авторизації користувача через [JWT](https://jwt.io/).
 
-<h3>2. Users</h3>
-<li><a href="http://localhost:3000/api/users/signup" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/signup</a> - <b>/POST request/</b> - user registration;</li>
-<li><a href="http://localhost:3000/api/users/login" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/login</a> - <b>/POST request/</b> - user login;</li>
-<li><a href="http://localhost:3000/api/users/logout" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/logout</a> - <b>/POST request/</b> - user logout;</li>
-<li><a href="http://localhost:3000/api/users/current" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/current</a> - <b>/GET request/</b> - get user data by token;</li>
-<li><a href="http://localhost:3000/api/users/subscription" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/subscription</a> - <b>/PATCH request/</b> - update user subscription;</li>
-<li><a href="http://localhost:3000/api/users/starter" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/starter</a> - <b>/GET request/</b> - access by "starter" subscription;</li>
-<li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
-<li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
-<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
+## Крок 1
+
+У коді створи схему і модель користувача для колекції `users`.
+
+```js
+{
+  password: {
+    type: String,
+    required: [true, 'Set password for user'],
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required'],
+    unique: true,
+  },
+  subscription: {
+    type: String,
+    enum: ["starter", "pro", "business"],
+    default: "starter"
+  },
+  token: String
+}
+```
+
+Змініть схему контактів, щоб кожен користувач бачив тільки свої контакти. Для цього в схемі контактів додайте властивість
+
+```js
+    owner: {
+      type: SchemaTypes.ObjectId,
+      ref: 'user',
+    }
+```
+Примітка: `'user'` - назва моделі користувача
+
+## Крок 2
+
+### Регістрація
+
+Створити ендпоінт [`/users/register`](#registration-request)
+
+Зробити валідацію всіх обов'язкових полів (email і password). При помилці валідації повернути [Помилку валідації](#registration-validation-error).
+
+У разі успішної валідації в моделі `User` створити користувача за даними, які пройшли валідацію. Для засолювання паролів використовуй [bcrypt](https://www.npmjs.com/package/bcrypt) або [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+
+- Якщо пошта вже використовується кимось іншим, повернути [Помилку Conflict](#registration-conflict-error).
+- В іншому випадку повернути [Успішна відповідь](#registration-success-response).
+
+#### Registration request
+
+```shell
+POST /users/register
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com",
+  "password": "examplepassword"
+}
+```
+
+#### Registration validation error
+
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: <Помилка від Joi або іншої бібліотеки валідації>
+```
+
+#### Registration conflict error
+
+```shell
+Status: 409 Conflict
+Content-Type: application/json
+ResponseBody: {
+  "message": "Email in use"
+}
+```
+
+#### Registration success response
+
+```shell
+Status: 201 Created
+Content-Type: application/json
+ResponseBody: {
+  "user": {
+    "email": "example@example.com",
+    "subscription": "starter"
+  }
+}
+```
+
+### Логін
+
+Створити ендпоінт [`/users/login`](#login-request)
+
+В моделі `User` знайти користувача за `email`.
+
+Зробити валідацію всіх обов'язкових полів (email і password). При помилці валідації повернути [Помилку валідації](#validation-error-login).
+
+- В іншому випадку, порівняти пароль для знайденого користувача, якщо паролі збігаються створити токен, зберегти в поточному юзера і повернути [Успішна відповідь](#login-success-response).
+- Якщо пароль або імейл невірний, повернути [Помилку Unauthorized](#login-auth-error).
+
+#### Login request
+
+```shell
+POST /users/login
+Content-Type: application/json
+RequestBody: {
+  "email": "example@example.com",
+  "password": "examplepassword"
+}
+```
+
+#### Login validation error
+
+```shell
+Status: 400 Bad Request
+Content-Type: application/json
+ResponseBody: <Помилка від Joi або іншої бібліотеки валідації>
+```
+
+#### Login success response
+
+```shell
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "token": "exampletoken",
+  "user": {
+    "email": "example@example.com",
+    "subscription": "starter"
+  }
+}
+```
+
+#### Login auth error
+
+```shell
+Status: 401 Unauthorized
+ResponseBody: {
+  "message": "Email or password is wrong"
+}
+```
+
+## Крок 3
+
+### Перевірка токена
+
+Створи мідлвар для перевірки токена і додай його до всіх раутів, які повинні бути захищені.
+
+- Мідлвар бере токен з заголовків `Authorization`, перевіряє токен на валідність.
+- У випадку помилки повернути [Помилку Unauthorized](#middleware-unauthorized-error).
+- Якщо валідація пройшла успішно, отримати з токена `id` користувача. Знайти користувача в базі даних з цим `id`. 
+- Якщо користувач існує і токен збігається з тим, що знаходиться в базі, записати його дані в `req.user` і викликати `next()`. 
+- Якщо користувача з таким `id` НЕ існує або токени не збігаються, повернути [Помилку Unauthorized](#middleware-unauthorized-error)
+
+#### Middleware unauthorized error
+
+```shell
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+```
+
+## Крок 4
+
+### Логаут
+
+Створити ендпоінт [`/users/logout`](#logout-request)
+
+Додай в маршрут мідлвар перевірки токена.
+
+- У моделі `User` знайти користувача за `_id`.
+- Якщо користувача не існує повернути [Помилку Unauthorized](#logout-unauthorized-error).
+- В іншому випадку, видалити токен у поточного юзера і повернути [Успішна відповідь](#logout-success-response).
+
+#### Logout request
+
+```shell
+POST /users/logout
+Authorization: "Bearer {{token}}"
+```
+
+#### Logout unauthorized error
+
+```shell
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+```
+
+#### Logout success response
+
+```shell
+Status: 204 No Content
+```
+
+## Крок 5
+
+### Поточний користувач - отримати дані юзера по токені
+
+Створити ендпоінт [`/users/current`](#current-user-request)
+
+Додай в раут мідлвар перевірки токена.
+
+- Якщо користувача не існує повернути [Помилку Unauthorized](#current-user-unauthorized-error)
+- В іншому випадку повернути [Успішну відповідь](#current-user-success-response)
+
+#### Current user request
+
+```shell
+GET /users/current
+Authorization: "Bearer {{token}}"
+```
+
+#### Current user unauthorized error
+
+```shell
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+```
+
+#### Current user success response
+
+```shell
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "email": "example@example.com",
+  "subscription": "starter"
+}
+```
+
+## Додаткове завдання - необов'язкове
+
+- Зробити пагінацію з [mongoose-paginate-v2](https://www.npmjs.com/package/mongoose-paginate-v2) для колекції контактів (GET /contacts?page=1&limit=20).
+- Зробити фільтрацію контактів по полю обраного (GET /contacts?favorite=true)
+- Оновлення підписки (`subscription`) користувача через ендпоінт` PATCH` `/users`. Підписка повинна мати одне з наступних значень `['starter', 'pro', 'business']`
