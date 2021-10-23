@@ -1,29 +1,75 @@
-<h2>REST API used for working with a collection of contacts.</h2>
+# Домашнє завдання 3
 
-<h2>Commands:</h2>
-<li><b>npm start</b> - server run in production mode;</li>
-<li><b>npm run start:dev</b> - server run in development mode;</li>
-<li><b>npm run lint</b> - run code check execution with the help of eslint; it should be done before each PR and fix all linter errors;</li>
-<li><b>npm lint:fix</b> - the same linter check, but with automatic error-fixing;</li>
-<li><b>npm test</b> - test launch in test environment;</li>
-<li><b>npm test:coverage</b> - test report generation.</li>
+Створи гілку `03-mongodb` з гілки `master`.
 
-<h2>Routes:</h2>
-<h3>1. Contacts</h3>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/GET request/</b> - get all contacts;</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/GET request/</b> - get a contact by Id;</li>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/POST request/</b> - add a new contact (required fields: name, email, phone, optional field: favorite);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/PUT request/</b> - update an existing contact (at least 1 field should be updated);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/DELETE request/</b> - remove a contact;</li>
-<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact.</li>
+Продовж створення REST API для роботи з колекцією контактів.
 
-<h3>2. Users</h3>
-<li><a href="http://localhost:3000/api/users/signup" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/signup</a> - <b>/POST request/</b> - user registration;</li>
-<li><a href="http://localhost:3000/api/users/login" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/login</a> - <b>/POST request/</b> - user login;</li>
-<li><a href="http://localhost:3000/api/users/logout" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/logout</a> - <b>/POST request/</b> - user logout;</li>
-<li><a href="http://localhost:3000/api/users/current" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/current</a> - <b>/GET request/</b> - get user data by token;</li>
-<li><a href="http://localhost:3000/api/users/subscription" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/subscription</a> - <b>/PATCH request/</b> - update user subscription;</li>
-<li><a href="http://localhost:3000/api/users/starter" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/starter</a> - <b>/GET request/</b> - access by "starter" subscription;</li>
-<li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
-<li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
-<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
+## Крок 1
+
+Створи аккаунт на [MongoDB Atlas](https://www.mongodb.com/cloud/atlas). Після чого в акаунті створи новий проект і настрій **бесплатный кластер**. Під час налаштування кластера вибери провавйдера і регіон як на скріншоті нижче. Якщо вибрати занадто віддалений регіон, швидкість відповіді сервера буде довше.
+
+![atlas cluster setup](./atlas-cluster.jpg)
+
+## Крок 2
+
+Установи графічний редактор
+[MongoDB Compass](https://www.mongodb.com/download-center/compass) для зручної
+роботи з базою даних для MongoDB. Настрій підключення своєї хмарної бази даних
+до Compass. У MongoDB Atlas не забудь створити користувача з правами
+адміністратора.
+
+## Крок 3
+
+Через Compass створи базу даних `db-contacts` і в ній колекцію `contacts`. Візьми [ссылка на json](./contacts) і за допомогою Compass наповни колекцію `contacts` (зроби імпорт) його вмістом.
+
+![data](./json-data.png)
+
+Якщо ви все зробили правильно, дані повинні з'явитися у вашій базі в колекції `contacts`
+
+![data](./mongo-data.png)
+
+## Крок 4
+
+Використовуй вихідний код [домашней работы #2](../homework-02/README.md) і
+заміни зберігання контактів з json-файлу на створену тобою базу даних.
+
+- Напиши код для створення підключення до MongoDB за допомогою [Mongoose](https://mongoosejs.com/).
+- При успішному підключенні виведи в консоль повідомлення `"Database connection successful"`.
+- Обов'язково обробив помилку підключення. Виведи в консоль повідомлення помилки і заверши процес використовуючи `process.exit(1)`.
+- У функціях обробки запитів заміни код CRUD-операцій над контактами з файлу, на Mongoose-методи для роботи з колекцією контактів в базі даних.
+
+Схема моделі для колекції `contacts`:
+
+```js
+  {
+    name: {
+      type: String,
+      required: [true, 'Set name for contact'],
+    },
+    email: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    favorite: {
+      type: Boolean,
+      default: false,
+    },
+  }
+```
+
+## Крок 5
+
+У нас з'явилося в контактах додаткове поле статусу `favorite`, яке приймає логічне значення` true` або `false`. Воно відповідає за те, що в обраному чи ні знаходиться зазначений контакт. Потрыбно реалізувати для оновлення статусу контакту новий роутер
+
+### @ PATCH / api / contacts /: contactId / favorite
+
+- Отримує параметр `contactId`
+- Отримує `body` в json-форматі c оновленням поля` favorite`
+- Якщо `body` немає, повертає json з ключем` { "message": "missing field favorite"} `і статусом` 400`
+- Якщо з `body` все добре, викликає функцію` updateStatusContact (contactId, body)` (напиши її) для поновлення контакту в базі
+- За результатом роботи функції повертає оновлений об'єкт контакту і статусом `200`. В іншому випадку, повертає json з ключем `" message ":" Not found "` і статусом `404`
+
+
+Для роута `POST /api/contacts` внеси зміни: якщо поле `favorite` не вказали в `body`, то при збереженні в базу нового контакту, зроби поле `favorite` рівним за замовчуванням `false`
