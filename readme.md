@@ -1,30 +1,95 @@
-<h2>REST API used for working with a collection of contacts.</h2>
 
-<h2>Commands:</h2>
-<li><b>npm start</b> - server run in production mode;</li>
-<li><b>npm run start:dev</b> - server run in development mode;</li>
-<li><b>npm run lint</b> - run code check execution with the help of eslint; it should be done before each PR and fix all linter errors;</li>
-<li><b>npm lint:fix</b> - the same linter check, but with automatic error-fixing;</li>
-<li><b>npm test</b> - test launch in test environment;</li>
-<li><b>npm test:coverage</b> - test report generation.</li>
+# Домашнє завдання 5
 
-<h2>Routes:</h2>
-<h3>1. Contacts</h3>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/GET request/</b> - get all contacts;</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/GET request/</b> - get a contact by Id;</li>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/POST request/</b> - add a new contact (required fields: name, email, phone, optional field: favorite);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/PUT request/</b> - update an existing contact (at least 1 field should be updated);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/DELETE request/</b> - remove a contact;</li>
-<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact.</li>
+Створи гілку `hw05-avatars` з гілки ` master`.
 
-<h3>2. Users</h3>
-<li><a href="http://localhost:3000/api/users/signup" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/signup</a> - <b>/POST request/</b> - user registration;</li>
-<li><a href="http://localhost:3000/api/users/login" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/login</a> - <b>/POST request/</b> - user login;</li>
-<li><a href="http://localhost:3000/api/users/logout" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/logout</a> - <b>/POST request/</b> - user logout;</li>
-<li><a href="http://localhost:3000/api/users/current" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/current</a> - <b>/GET request/</b> - get user data by token;</li>
-<li><a href="http://localhost:3000/api/users/subscription" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/subscription</a> - <b>/PATCH request/</b> - update user subscription;</li>
-<li><a href="http://localhost:3000/api/users/starter" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/starter</a> - <b>/GET request/</b> - access by "starter" subscription;</li>
-<li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
-<li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
-<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
+Продовж створення REST API для роботи з колекцією контактів. Додай можливість завантаження аватарки користувача через [Multer] (https://github.com/expressjs/multer).
+
+## Крок 1
+
+Створи папку `public` для роздачі статики. У цій папці зроби папку `avatars`. Налаштуй Express на роздачу статичних файлів з папки `public`.
+
+Поклади будь-яке зображення в папку `public/avatars` і перевір, що роздача статики працює. При переході по такому URL браузер відобразить зображення.
+
+`` `Shell http://locahost:<порт>/avatars/<ім'я файлу з розширенням> `` `
+
+## Крок 2
+
+У схему користувача додай нову властивість `avatarURL` для зберігання зображення.
+
+```shell
+{
+  ...
+  avatarURL: String,
+  ...
+}
+```
+
+- Використовуй пакет [gravatar](https://www.npmjs.com/package/gravatar) для того, щоб при реєстрації нового користувача відразу згенерувати йому аватар по його `email`.
+
+## Крок 3
+
+При реєстрації користувача:
+
+- Створюй посилання на аватарку користувача за допомогою [gravatar](https://www.npmjs.com/package/gravatar)
+- Отриманий URL збережи в поле `avatarURL` під час створення користувача
+
+## Крок 4
+
+Додай можливість поновлення аватарки, створивши ендпоінт `/users/avatars` і використовуючи метод` PATCH`.
+
+![avatar upload from postman](./avatar-upload.png)
+
+```shell
+# Запит
+PATCH /users/avatars
+Content-Type: multipart/form-data
+Authorization: "Bearer {{token}}"
+RequestBody: завантажений файл
+
+# Успішна відповідь
+Status: 200 OK
+Content-Type: application/json
+ResponseBody: {
+  "avatarURL": "тут буде посилання на зображення"
+}
+
+# Неуспішна відповідь
+Status: 401 Unauthorized
+Content-Type: application/json
+ResponseBody: {
+  "message": "Not authorized"
+}
+```
+
+- Створи папку `tmp` в корені проекту і зберігай в неї завантажену аватарку.
+- Оброби аватарку пакетом [jimp](https://www.npmjs.com/package/jimp) і постав для неї розміри 250 на 250
+- Перенеси аватарку користувача з папки `tmp` в папку `public/avatars` і дай їй унікальне ім'я для конкретного користувача.
+- Отриманий `URL` `/avatars/<ім'я файлу з розширенням>` та збережи в поле `avatarURL` користувача
+
+## Додаткове завдання - необов'язкове
+
+### 1. Написати unit-тести для мідлвара по авторизації
+
+За допомогою [Jest](https://jestjs.io/ru/docs/getting-started)
+
+- всі методи і функції, що викликаються мідлваром (разом з next), повинні бути заглушені за допомогою mock
+- потрібно перевірити кількість викликів заглушок і аргументи, з якими вони викликалися у випадках, коли:
+  - користувач не передав токен в `Authorization` заголовку
+  - токен користувача невалідний
+  - токен користувача валідний
+
+> Підказка: Іноді Вам може знадобиться перевизначити повернені значення методів-заглушок
+
+### 2. Написати e2e (приймальні) тести для ендпоінта поновлення аватарок
+
+Потрібно буде використовувати [supertest](https://www.npmjs.com/package/supertest)
+
+Тести повинні перевіряти:
+
+- повертається відповідь зі статус кодом 401, якщо токен користувача невалідний
+- У разі, якщо все пройшло успішно, перевірити:
+  - повертається відповідь зі статус кодом 200
+  - чи повертається тіло відповіді в правильному форматі
+  - чи додається `avatarUrl` в документ цільового користувача
 
