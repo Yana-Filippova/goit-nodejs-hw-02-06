@@ -27,4 +27,10 @@
 <li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
 <li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
 <li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
+<li><a href="http://localhost:3000/api/users/verify/:verificationTokens" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/verify/:verificationTokens</a> - <b>/GET request/</b> - user search in user model by verificationToken parameter.</li>
+<li><a href="http://localhost:3000/api/auth/verify/:verificationToken" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/auth/verify/:verificationToken</a> - <b>/GET request/</b> - user verification request.</li>
+
+
+
+
 
