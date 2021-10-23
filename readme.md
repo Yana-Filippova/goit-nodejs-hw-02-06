@@ -1,29 +1,89 @@
-<h2>REST API used for working with a collection of contacts.</h2>
+# Домашнє завдання 2
 
-<h2>Commands:</h2>
-<li><b>npm start</b> - server run in production mode;</li>
-<li><b>npm run start:dev</b> - server run in development mode;</li>
-<li><b>npm run lint</b> - run code check execution with the help of eslint; it should be done before each PR and fix all linter errors;</li>
-<li><b>npm lint:fix</b> - the same linter check, but with automatic error-fixing;</li>
-<li><b>npm test</b> - test launch in test environment;</li>
-<li><b>npm test:coverage</b> - test report generation.</li>
+Подивися пояснюче відео як це зробити та здавати ДЗ правильно: [![Title](./js.png)](https://www.youtube.com/watch?v=wabSW_sz_cM ' пояснення')
 
-<h2>Routes:</h2>
-<h3>1. Contacts</h3>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/GET request/</b> - get all contacts;</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/GET request/</b> - get a contact by Id;</li>
-<li><a href="http://localhost:3000/api/contacts" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts</a> - <b>/POST request/</b> - add a new contact (required fields: name, email, phone, optional field: favorite);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/PUT request/</b> - update an existing contact (at least 1 field should be updated);</li>
-<li><a href="http://localhost:3000/api/contacts/id" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id</a> - <b>/DELETE request/</b> - remove a contact;</li>
-<li><a href="http://localhost:3000/api/contacts/id/favorite" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/contacts/id/favorite</a> - <b>/PATCH request/</b> - update 'favorite' field for a contact.</li>
+Написати REST API для роботи з колекцією контактів. Для роботи з REST API використовуй [Postman] (https://www.getpostman.com/).
 
-<h3>2. Users</h3>
-<li><a href="http://localhost:3000/api/users/signup" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/signup</a> - <b>/POST request/</b> - user registration;</li>
-<li><a href="http://localhost:3000/api/users/login" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/login</a> - <b>/POST request/</b> - user login;</li>
-<li><a href="http://localhost:3000/api/users/logout" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/logout</a> - <b>/POST request/</b> - user logout;</li>
-<li><a href="http://localhost:3000/api/users/current" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/current</a> - <b>/GET request/</b> - get user data by token;</li>
-<li><a href="http://localhost:3000/api/users/subscription" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/subscription</a> - <b>/PATCH request/</b> - update user subscription;</li>
-<li><a href="http://localhost:3000/api/users/starter" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/starter</a> - <b>/GET request/</b> - access by "starter" subscription;</li>
-<li><a href="http://localhost:3000/api/users/pro" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/pro</a> - <b>/GET request/</b> - access by "pro" subscription;</li>
-<li><a href="http://localhost:3000/api/users/business" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/business</a> - <b>/GET request/</b> - access by "business" subscription;</li>
-<li><a href="http://localhost:3000/api/users/avatars" rel="noopener noreferrer" target="_blank">http://localhost:3000/api/users/avatars</a> - <b>/PATCH request/</b> - upload user avatar.</li>
+Прочитай уважно readme в клонованому темплейті, там описаний механізм здачі домашніх завдань. Та починай виконувати ДЗ
+
+## Крок 1
+
+Створи гілку `hw02-express` з гілки master.
+
+Встанови в командою пакети
+
+```bash
+npm i
+```
+
+Такі пакети є в проекті:
+
+- [express](https://www.npmjs.com/package/express)
+- [morgan](https://www.npmjs.com/package/morgan)
+- [cors](https://www.npmjs.com/package/cors)
+
+## Крок 2
+
+У `app.js` – веб сервер на `express` і прошарки `morgan` і `cors`. Почни налаштовувати раутінг для роботи з колекцією контактів.
+
+REST API повинен підтримувати такі раути.
+
+### @ GET /api/contacts
+
+- нічого не отримує
+- викликає функцію `listContacts` для роботи з json-файлом `contacts.json`
+- повертає масив всіх контактів в json-форматі зі статусом `200`
+
+### @ GET /api/contacts/:contactId
+
+- Не отримує `body`
+- Отримує параметр `contactId`
+- викликає функцію `getById` для роботи з json-файлом `contacts.json`
+- якщо такий `id` є, повертає об'єкт контакту в json-форматі зі статусом `200`
+- якщо такого `id` немає, повертає json з ключем `"message": "Not found"` і статусом `404`
+
+### @ POST /api/contacts
+
+- Отримує `body` в форматі `{name, email, phone}`
+- Якщо в `body` немає якихось обов'язкових полів, повертає json з ключем `{"message": "missing required name field"}` і статусом `400`
+- Якщо з `body` все добре, додає унікальний ідентифікатор в об'єкт контакту
+- Викликає функцію `addContact(body)` для збереження контакту в файлі `contacts.json`
+- За результатом роботи функції повертає об'єкт з доданим `id` `{id, name, email, phone}` і статусом `201`
+
+### @ DELETE /api/contacts/:contactId
+
+- Не отримує `body`
+- Отримує параметр `contactId`
+- Викликає функцію `removeContact` для роботи з json-файлом `contacts.json`
+- якщо такий `id` є, повертає json формату `{"message": "contact deleted"}` і статусом `200`
+- якщо такого `id` немає, повертає json з ключем `"message": "Not found"` і статусом `404`
+
+### @ PUT /api/contacts/:contactId
+
+- Отримує параметр `contactId`
+- Отримує `body` в json-форматі c оновленням будь-яких полів `name, email и phone`
+- Якщо `body` немає, повертає json з ключем `{"message": "missing fields"}` і статусом `400`
+- Якщо з `body` всі добре, викликає функцію `updateContact(contactId, body)`. (Напиши її) для поновлення контакту в файлі `contacts.json`
+- За результатом роботи функції повертає оновлений об'єкт контакту і статусом `200`. В іншому випадку, повертає json з ключем `"message": "Not found"` і статусом `404`
+
+## Крок 3
+
+Для маршрутів, що приймають дані (`POST`,` PUT`, `PATCH`), продумайте перевірку (валідацію) отриманих даних. Для валідації прийнятих даних можна використовувати один з пакетів - валідаторів даних, а не писати перевірки самостійно:
+
+1. [joi](https://github.com/sideway/joi)
+2. [express-validator](https://github.com/express-validator/express-validator)
+3. [yup](https://github.com/jquense/yup)
+
+<img src="validator.png" width="640">
+
+## Критерії прийому дз # 2-6
+
+- Створено репозиторій з домашнім завданням &mdash; REST API додаток
+- При створенні репозиторія використаний [бойлерплейт](https://github.com/goitacademy/nodejs-homework-template)
+- Пулл-реквест (PR) з відповідним дз відправлений менторові в [schoology](https://app.schoology.com/login) на перевірку (посилання на PR)
+- Код відповідає технічному завданню проекта
+- При виконанні коду не виникає необроблених помилок
+- Назва змінних, властивостей і методів починається з малої літери і записуються в нотації CamelCase. Використовуються англійські іменники
+- Назва функції або методу містить дієслово
+- У коді немає закоментуваних ділянок коду
+- Проект коректно працює з актуальною LTS-версією Node
