@@ -107,15 +107,15 @@ ResponseBody: {
 - Якщо з `body` все добре, виконуємо повторну відправку листа з `verificationToken` на вказаний email, але тільки якщо користувач не верифікований
 - Якщо користувач вже пройшов верифікацію відправити json з ключем `{"message":"Verification has already been passed"}` зі статусом `400 Bad Request`
 
-#### Resending a email request
+#### Resending an email request
 
-````shell
+```shell
 POST /users/verify
 Content-Type: application/json
 RequestBody: {
   "email": "example@example.com"
 }
-`` `
+```
 
 #### Resending a email validation error
 
@@ -146,7 +146,3 @@ ResponseBody: {
 ```
 
 > Примітка: Як альтернативу SendGrid можна використовувати пакет [nodemailer](https://www.npmjs.com/package/nodemailer)
-
-
-
-
