@@ -40,21 +40,24 @@
 
 ![avatar upload from postman](./avatar-upload.png)
 
-```shell
 # Запит
+```shell
 PATCH /users/avatars
 Content-Type: multipart/form-data
 Authorization: "Bearer {{token}}"
 RequestBody: завантажений файл
-
+```
 # Успішна відповідь
+```shell
 Status: 200 OK
 Content-Type: application/json
 ResponseBody: {
   "avatarURL": "тут буде посилання на зображення"
 }
+```
 
 # Неуспішна відповідь
+```shell
 Status: 401 Unauthorized
 Content-Type: application/json
 ResponseBody: {
