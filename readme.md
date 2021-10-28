@@ -107,7 +107,7 @@ ResponseBody: {
 - Якщо з `body` все добре, виконуємо повторну відправку листа з `verificationToken` на вказаний email, але тільки якщо користувач не верифікований
 - Якщо користувач вже пройшов верифікацію відправити json з ключем `{"message":"Verification has already been passed"}` зі статусом `400 Bad Request`
 
-#### Resending an email request
+#### Resending email request
 
 ```shell
 POST /users/verify
@@ -117,7 +117,7 @@ RequestBody: {
 }
 ```
 
-#### Resending a email validation error
+#### Resending email validation error
 
 ```shell
 Status: 400 Bad Request
@@ -125,7 +125,7 @@ Content-Type: application/json
 ResponseBody: <Помилка від Joi або іншої бібліотеки валідації>
 ````
 
-#### Resending a email success response
+#### Resending email success response
 
 ```shell
 Status: 200 Ok
