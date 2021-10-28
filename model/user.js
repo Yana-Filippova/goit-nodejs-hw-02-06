@@ -1,6 +1,7 @@
 const { Schema, model } = require("mongoose");
 const gravatar = require("gravatar");
-
+const { v4: uuidv4 } = require("uuid");
+// const crypto = require("crypto");
 const { Subscription, AvatarSize } = require("../config/constants");
 const bcrypt = require("bcryptjs");
 const SALT_FACTOR = 10;
@@ -40,7 +41,19 @@ const userSchema = new Schema(
       },
     },
     idUserCloud: { type: String, default: null },
+
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verifyToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+      default: uuidv4(),
+      // default: crypto.randomUUID(),
+    },
   },
+
   {
     versionKey: false,
     timestamps: true,
