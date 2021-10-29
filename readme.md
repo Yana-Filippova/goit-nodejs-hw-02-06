@@ -95,4 +95,3 @@ _The sample of user schema:_ :arrow_down:
     "verifyToken": "xxxxx.yyyyy.zzzzz",             
 }
 ```
-
